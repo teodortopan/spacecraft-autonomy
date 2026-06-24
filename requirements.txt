@@ -1,0 +1,15 @@
+# Core scientific stack
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+pyyaml>=6.0
+
+# Convex optimization (Week 3 — guidance)
+cvxpy>=1.4
+
+# Optional: convenience routines for control (LQR/CARE solvers, etc.)
+# You can implement the math yourself without this; it's here for cross-checking.
+control>=0.9
+
+# Testing
+pytest>=8.0

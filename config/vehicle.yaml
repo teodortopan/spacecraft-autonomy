@@ -1,0 +1,71 @@
+# Vehicle + simulation configuration for the powered-descent landing simulator.
+# Values are a Falcon-ish TOY (scaled down) — chosen so the math is well-conditioned
+# on a laptop, NOT to match any real vehicle. Tune freely.
+
+vehicle:
+  dry_mass: 22000.0          # kg, structure + payload (no propellant)
+  initial_propellant: 3000.0 # kg, usable propellant at sim start
+  # => initial wet mass = 25000 kg
+  max_thrust: 491000.0       # N. At wet mass (25000 kg) this gives T/W ~= 2.0 (max_thrust / (m*g)).
+  min_thrust_fraction: 0.4   # engines can't throttle below 40% of max while lit (typical for real engines).
+  isp: 280.0                 # s, specific impulse (sets propellant burn rate via mdot = T / (Isp * g0)).
+  max_gimbal_angle: 0.2618   # rad (15 deg). Thrust vector can deflect +/- this from the body axis.
+  # 2D rigid-body rotational inertia about the center of mass.
+  inertia: 1.7e6             # kg*m^2 (toy value for the scaled vehicle).
+  length: 30.0               # m, used for inertia intuition + drawing the rocket in the animation.
+
+environment:
+  gravity: 9.81              # m/s^2, constant (flat-earth, no altitude variation).
+  g0: 9.80665                # m/s^2, standard gravity used in the Isp / mdot relation.
+
+simulation:
+  dt: 0.02                   # s, integration timestep (50 Hz).
+  max_time: 60.0             # s, hard stop for a single run.
+  integrator: rk4            # "rk4" or "euler" (see src/simulator.py).
+  ground_altitude: 0.0       # m, y at which "landing" / "crash" is evaluated.
+
+# Initial condition for the deterministic (single) runs. Monte-Carlo overrides these
+# with dispersions (see montecarlo section + src/montecarlo.py).
+initial_state:
+  x: 0.0                     # m, horizontal position
+  vx: 0.0                    # m/s, horizontal velocity
+  y: 1000.0                  # m, altitude
+  vy: -80.0                  # m/s, descent rate (negative = downward)
+  theta: 0.0                 # rad, attitude (0 = upright, +CCW from vertical)
+  omega: 0.0                 # rad/s, angular rate
+
+# Soft-landing success gates (used by montecarlo + scripts to score a run).
+landing:
+  max_touchdown_speed: 2.0   # m/s, |velocity| at touchdown to count as a soft landing
+  max_touchdown_tilt: 0.087  # rad (~5 deg), |theta| at touchdown
+  max_touchdown_omega: 0.087 # rad/s, |omega| at touchdown
+  max_horizontal_offset: 5.0 # m, |x| from pad center at touchdown
+
+# Noise model. Process noise is injected on the dynamics; sensor noise is added to
+# measurements handed to the estimator (Week 2+). Std-devs are per-state / per-sensor.
+noise:
+  process_std:               # added to state derivatives each step (0 = perfect dynamics)
+    x: 0.0
+    vx: 0.05
+    y: 0.0
+    vy: 0.05
+    theta: 0.0
+    omega: 0.01
+  sensor_std:                # added to measurements (used by Week 2 EKF)
+    position: 5.0            # m, horizontal+vertical position fix (e.g. GPS-like)
+    velocity: 0.5            # m/s
+    altitude: 1.0            # m, range/radar altimeter
+    attitude: 0.01           # rad, IMU-derived attitude
+    gyro: 0.005              # rad/s, gyro angular rate
+
+# Monte-Carlo dispersions (Week 4). Each field is a +/- uniform or gaussian spread
+# applied to the nominal initial_state.
+montecarlo:
+  n_runs: 200
+  dispersions:               # gaussian std-devs on the initial condition
+    x: 50.0
+    vx: 5.0
+    y: 50.0
+    vy: 5.0
+    theta: 0.05
+    omega: 0.02

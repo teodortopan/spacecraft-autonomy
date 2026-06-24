@@ -1,0 +1,21 @@
+# Virtual environments
+rocket-env/
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Outputs (generated plots / animations / runs)
+outputs/
+*.mp4
+*.gif
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

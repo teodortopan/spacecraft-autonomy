@@ -4,9 +4,10 @@ Guidance for Claude Code (and any AI agent) working in this repository.
 
 ## What this project is
 
-A 2D→3D **powered-descent rocket landing simulator** that demonstrates the full GNC loop —
-**estimate → guide → control → actuate** — validated with Monte-Carlo dispersions. It is a
-**learning project** for the repo owner (Teodor). The point is for the owner to implement the
+This repo (`spacecraft-autonomy`) is the **GNC core** of a planned larger autonomous-spacecraft
+flight-software stack. The current code is a 2D→3D **powered-descent landing simulator** that
+demonstrates the full GNC loop — **estimate → guide → control → actuate** — validated with
+Monte-Carlo dispersions. It is a **learning project** for the repo owner (Teodor). The point is for the owner to implement the
 core estimation/control/guidance math *by hand* so he can defend every line in interviews.
 
 ## The contract (read before writing any code)

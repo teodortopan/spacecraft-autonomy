@@ -1,7 +1,11 @@
-# Powered-Descent GNC — Rocket Landing Simulator
+# Spacecraft Autonomy
 
-A simulator for autonomously landing a rocket under powered descent, demonstrating a full
-**Guidance, Navigation & Control (GNC)** loop:
+> **Scope:** an autonomous flight-software / GNC stack for spacecraft. This repo currently
+> implements the **GNC landing core** — the foundation for a larger autonomy stack (mission
+> planning, AI copilot, terrain-aware landing, telemetry, health monitoring) on the roadmap.
+
+The current core is a simulator for autonomously landing under powered descent, demonstrating the
+full **Guidance, Navigation & Control (GNC)** loop:
 
 > **estimate state → guide → control → actuate**
 
